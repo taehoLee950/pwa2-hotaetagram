@@ -5,6 +5,7 @@
  */
 
 import { SUCCESS } from "../../configs/responseCode.config.js";
+import authService from "../services/auth.service.js";
 import { createBaseResponse } from "../utils/createBaseResponse.util.js";
 
 // ----------------
@@ -17,8 +18,15 @@ import { createBaseResponse } from "../utils/createBaseResponse.util.js";
  * @param {import("express").NextFunction} next
  */
 async function login(req, res, next) {
-  const body = req.body;
-  res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, body));
+  try {
+    const body = req.body;
+
+    const result = await authService.login(body);
+
+    res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
+  } catch (e) {
+    return res.status(500).send(e.message);
+  }
 }
 
 // ----------------

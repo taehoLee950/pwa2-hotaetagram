@@ -15,7 +15,7 @@ export function createBaseResponse(codeInfo, data = null) {
   // codoInfo 파라미터: responseCode.config.js의 객체를 인자로 받음
   // data 파라미터: 안 받을시 기본값 = null
   const responseData = {
-    code: codeInfo,
+    code: codeInfo.code,
     msg: codeInfo.info,
   };
   if (data) {
