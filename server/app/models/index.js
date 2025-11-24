@@ -8,6 +8,10 @@ import "../../configs/env.config.js";
 import { Sequelize } from "sequelize";
 import User from "./User.js";
 import Post from "./Post.js";
+import Comment from "./Comment.js";
+import Like from "./Like.js";
+import Notification from "./Notification.js";
+import Push_subscription from "./Push_subscription.js";
 
 const db = {}; // 생성할 db 인스턴스 저장용
 
@@ -39,9 +43,17 @@ db.sequelize = sequelize; // 생성한 sequelize 인스턴스 db에 저장
 
 // 모델 초기화
 db.User = User.init(sequelize);
+db.Post = Post.init(sequelize);
+db.Comment = Comment.init(sequelize);
+db.Like = Like.init(sequelize);
+db.Notification = Notification.init(sequelize);
+db.Push_subscription = Push_subscription.init(sequelize);
 
 // 모델 관계 설정
-User.associate(db);
-Post.associate(db);
+Object.keys(db).forEach((modelName) => {
+  if (db[modelName] && db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
 
 export default db;

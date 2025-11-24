@@ -84,7 +84,19 @@ const Like = {
 
     return define;
   },
-  associate: (db) => {},
+  associate: (db) => {
+    // 관계 이름 수정
+    db.Like.belongsTo(db.User, {
+      targetKey: "id",
+      foreignKey: "userId",
+      as: "author",
+    });
+    db.Like.belongsTo(db.Post, {
+      targetKey: "id",
+      foreignKey: "postId",
+      as: "post",
+    });
+  },
 };
 
 export default Like;

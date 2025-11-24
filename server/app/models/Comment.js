@@ -7,7 +7,7 @@
 import dayjs from "dayjs";
 import { DataTypes } from "sequelize";
 
-const tableName = "comments";
+const modelName = "comments";
 
 // 컬럼 정의
 const attributes = {
@@ -97,7 +97,18 @@ const Comment = {
 
     return define;
   },
-  associate: (db) => {},
+  associate: (db) => {
+    db.Comment.belongsTo(db.User, {
+      targetKey: "id",
+      foreignKey: "userId",
+      as: "author",
+    });
+    db.Comment.belongsTo(db.Post, {
+      targetKey: "id",
+      foreignKey: "postId",
+      as: "post",
+    });
+  },
 };
 
 export default Comment;

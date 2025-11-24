@@ -7,7 +7,7 @@
 import dayjs from "dayjs";
 import { DataTypes } from "sequelize";
 
-const tableName = "push_subscriptions";
+const modelName = "push_subscriptions";
 
 // 컬럼 정의
 const attributes = {
@@ -84,7 +84,13 @@ const Push_subscription = {
 
     return define;
   },
-  associate: (db) => {},
+  associate: (db) => {
+    db.PushSubscription.belongsTo(db.User, {
+      targetKey: "id",
+      foreignKey: "userId",
+      as: "author",
+    });
+  },
 };
 
 export default Push_subscription;

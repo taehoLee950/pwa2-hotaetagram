@@ -48,4 +48,33 @@ const BAD_REQUEST_ERROR = {
 };
 Object.freeze(NOT_REGISTERED_ERROR); // 외부에서 객체 수정이 불가능하게 상수 객체 설정
 
-export { SUCCESS, NOT_REGISTERED_ERROR, BAD_REQUEST_ERROR };
+/**
+ * DB 에러 응답 코드 설정
+ * @type {ResponseCodeConfig}
+ */
+const DB_ERROR = {
+  code: "E80",
+  msg: "DB Error",
+  info: "서비스 제공 상태가 이상합니다.",
+  status: 500,
+};
+Object.freeze(DB_ERROR);
+
+/**
+ * 시스템 에러 응답 코드 설정
+ * @type {ResponseCodeConfig}
+ */
+const SYSTEM_ERROR = {
+  code: "E99",
+  msg: "Application Error",
+  info: "서비스 제공 상태가 이상합니다.",
+  status: 500,
+};
+Object.freeze(SYSTEM_ERROR);
+export {
+  SUCCESS,
+  NOT_REGISTERED_ERROR,
+  BAD_REQUEST_ERROR,
+  SYSTEM_ERROR,
+  DB_ERROR,
+};

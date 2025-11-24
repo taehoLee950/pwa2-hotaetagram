@@ -98,9 +98,20 @@ const Post = {
   },
   associate: (db) => {
     db.Post.belongsTo(db.User, {
-      tarkeyKey: "id",
+      targetKey: "id",
       foreignKey: "userId",
       as: "PostTable.user_id-belongsTo-User",
+    });
+    // 아래 2개 수정
+    db.Post.hasMany(db.Like, {
+      sourceKey: "id",
+      foreignKey: "userId",
+      as: "likes",
+    });
+    db.Post.belongsTo(db.User, {
+      targetKey: "id",
+      foreignKey: "userId",
+      as: "author",
     });
   },
 };

@@ -4,6 +4,8 @@
  * 251120 Lee init
  */
 
+import { NOT_REGISTERED_ERROR } from "../../configs/responseCode.config.js";
+import myError from "../errors/customs/my.error.js";
 import userRepository from "../repositories/user.repository.js";
 import bcrypt from "bcrypt";
 
@@ -15,12 +17,12 @@ async function login(body) {
 
   // 유저 존재 여부 체크
   if (!result) {
-    throw new Error("유저 없음");
+    throw myError("존재하지 않는 유저입니다.", NOT_REGISTERED_ERROR);
   }
 
   // 비밀번호 체크
   if (!bcrypt.compareSync(password, result.password)) {
-    throw new Error("비밀번호 틀림");
+    throw myError("비밀번호 틀림", NOT_REGISTERED_ERROR);
   }
 
   return result;

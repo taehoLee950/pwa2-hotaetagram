@@ -121,8 +121,29 @@ const User = {
   associate: (db) => {
     db.User.hasMany(db.Post, {
       sourceKey: "id",
-      foreignkEY: "userId",
+      foreignKey: "userId",
       as: "userTable.id-hasMany-Post",
+    });
+    /// 아래 4개 수정
+    db.User.hasMany(db.Like, {
+      sourceKey: "id",
+      foreignKey: "userId",
+      as: "likes",
+    });
+    db.User.hasMany(db.Comment, {
+      sourceKey: "id",
+      foreignKey: "userId",
+      as: "comments",
+    });
+    db.User.hasMany(db.Push_Subscription, {
+      sourceKey: "id",
+      foreignKey: "userId",
+      as: "pushSubscriptions",
+    });
+    db.User.hasMany(db.Notification, {
+      sourceKey: "id",
+      foreignKey: "userId",
+      as: "notifications",
     });
   },
 };
