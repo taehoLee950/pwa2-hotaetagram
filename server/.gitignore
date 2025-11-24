@@ -1,3 +1,4 @@
 node_modules
 storage
-.env*
+# TODO: 수업용은 env 켜놓고 하고 실제로는 env 추적 잠금
+# .env* 
