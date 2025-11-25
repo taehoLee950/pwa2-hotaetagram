@@ -5,7 +5,6 @@
  */
 
 import { SUCCESS } from "../../configs/responseCode.config.js";
-import { logger } from "../middlewares/loggers/winston.logger.js";
 import authService from "../services/auth.service.js";
 import { createBaseResponse } from "../utils/createBaseResponse.util.js";
 
@@ -27,13 +26,16 @@ async function login(req, res, next) {
   // logger.debug("디버그");
   // logger.silly("씰리씰리!");
   try {
-    const body = req.body;
+    const body = req.body; // 유효성 검사 통과한 클라이언트 요청값 수집
 
-    const result = await authService.login(body);
+    // 로그인 서비스 호출
+    const { accessToken, refreshToken, user } = await authService.login(body);
 
-    res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
+    res
+      .status(SUCCESS.status)
+      .send(createBaseResponse(SUCCESS, { accessToken, user })); //응답 표준 호출
   } catch (e) {
-    next(e);
+    next(e); // 에러 발생시 errorHandler.js에서 처리하도록 넘김
   }
 }
 

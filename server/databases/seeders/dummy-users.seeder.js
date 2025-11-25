@@ -15,7 +15,7 @@ export default {
     const records = [
       {
         email: "admin@admin.com",
-        password: await bcrypt.hash("admin", 10),
+        password: await bcrypt.hash("admin1234", 10),
         nick: "이태호관리자",
         provider: "NONE",
         role: "SUPER",
@@ -25,7 +25,7 @@ export default {
       },
       {
         email: "admin2@admin.com",
-        password: await bcrypt.hash("qwe123s", 10),
+        password: await bcrypt.hash("qwer1234", 10),
         nick: "이태호관리자2",
         provider: "KAKAO",
         role: "NORMAL",

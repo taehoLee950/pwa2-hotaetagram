@@ -10,7 +10,7 @@ import authRouter from "./routes/auth.router.js";
 import errorHandler from "./app/errors/errorHandler.js";
 
 const app = express();
-app.use(express.json()); // JSON 요청 파싱 처리
+app.use(express.json()); // JSON 요청 파싱 처리 전역 미들웨어
 
 // ------------
 // 라우터 정의

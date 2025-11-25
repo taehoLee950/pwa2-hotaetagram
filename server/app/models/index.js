@@ -15,7 +15,11 @@ import Push_subscription from "./Push_subscription.js";
 
 const db = {}; // 생성할 db 인스턴스 저장용
 
-// Sequelize 인스턴스 생성
+// Sequelize ORM 초기화 및 모델 로딩, 관계 설정 총괄 담당
+
+// --------------
+// 환경 파일 호출 & Sequelize ORM 인스턴스
+// --------------
 const sequelize = new Sequelize(
   process.env.DB_MYSQL_DB_NAME, // DB명
   process.env.DB_MYSQL_USER, // DB 접속 유저
@@ -41,7 +45,9 @@ const sequelize = new Sequelize(
 
 db.sequelize = sequelize; // 생성한 sequelize 인스턴스 db에 저장
 
+// --------------
 // 모델 초기화
+// --------------
 db.User = User.init(sequelize);
 db.Post = Post.init(sequelize);
 db.Comment = Comment.init(sequelize);
@@ -49,7 +55,9 @@ db.Like = Like.init(sequelize);
 db.Notification = Notification.init(sequelize);
 db.Push_subscription = Push_subscription.init(sequelize);
 
+// --------------
 // 모델 관계 설정
+// --------------
 Object.keys(db).forEach((modelName) => {
   if (db[modelName] && db[modelName].associate) {
     db[modelName].associate(db);
