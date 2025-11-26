@@ -8,6 +8,7 @@ import express from "express";
 import { authController } from "../app/controllers/auth.controller.js";
 import loginValidator from "../app/middlewares/validations/validators/auth/login.validator.js";
 import validationHandler from "../app/middlewares/validations/validators/validationHandler.js";
+import authMiddleware from "../app/middlewares/auth/auth.middleware.js";
 
 // 인증 관련 라우트
 const authRouter = express.Router();
@@ -19,4 +20,7 @@ authRouter.post(
   authController.login // 비즈니스 로직 전달
 );
 
+authRouter.post("/reissue", authMiddleware, (req, res, next) => {
+  return res.send("reissue test");
+});
 export default authRouter;

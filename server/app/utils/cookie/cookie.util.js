@@ -27,7 +27,7 @@ function setCookie(
   secureFlg = false
 ) {
   res.cookie(cookieName, cookieValue, {
-    expires: dayjs().add(ttl, "millisecond").toDate(),
+    expires: dayjs().add(ttl, "second").toDate(),
     httpOnly: httpOnlyFlg,
     secure: secureFlg,
     sameSite: "none", // domain 검증 실행 여부

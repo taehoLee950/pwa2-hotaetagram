@@ -18,7 +18,7 @@ async function login(body) {
 
     // email로 유저 정보 획득
     // db 통신을 repo에게 위임
-    const user = await userRepository.findByEmail(null, email); // 이메일로 사용자 조회
+    const user = await userRepository.findByEmail(t, email); // 이메일로 사용자 조회
 
     // 유저 존재 여부 체크
     if (!user) {
@@ -37,7 +37,7 @@ async function login(body) {
 
     // refreshToken 저장
     user.refreshToken = refreshToken;
-    await userRepository.save(null, user);
+    await userRepository.save(t, user);
 
     return { user, accessToken, refreshToken }; // 검증 전부 성공 시 사용자 정보 반환
   });

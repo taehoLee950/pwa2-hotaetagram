@@ -5,6 +5,12 @@
  */
 
 import jwt from "jsonwebtoken";
+import myError from "../../errors/customs/my.error.js";
+import {
+  EXPIRED_TOKEN_ERROR,
+  INVALID_TOKEN_ERROR,
+  UNAUTHORIZED_ERROR,
+} from "../../../configs/responseCode.config.js";
 
 // -----------------
 // private
@@ -31,7 +37,6 @@ function generateToken(payload, ttl) {
 // -----------------
 // public
 // -----------------
-
 /**
  * 액세스 토큰 생성
  * @param {import("../../models/index.js").User} user
@@ -63,9 +68,52 @@ function generateRefreshToken(user) {
   return generateToken(payload, parseInt(process.env.JWT_REFRESH_TOKEN_EXPIRY));
 }
 
+/**
+ * 헤더에서 베어러 토큰 획득
+ * @param {import('express').Request} req
+ * @returns {string} token
+ */
+function getBearerToken(req) {
+  // Bearer 토큰 획득
+  const bearerToken = req.headers[process.env.JWT_HEADER_KEY];
+
+  // Bearer 토큰 미존재
+  if (!bearerToken) {
+    throw myError("Bearer 토큰 없음", UNAUTHORIZED_ERROR);
+  }
+
+  // 베어러토큰 형식 검증
+  const tokenParts = bearerToken.split(" ");
+  if (tokenParts.length !== 2 || tokenParts[0] !== process.env.JWT_SCHEME) {
+    throw myError("베어러 토큰 형식 이상", INVALID_TOKEN_ERROR);
+  }
+  return tokenParts[1];
+}
+
+/**
+ *
+ * @param {string} token
+ * @returns {jwt.Jwt} claims
+ */
+function getClaimWithVerifyToken(token) {
+  try {
+    return jwt.verify(token, process.env.JWT_SECRET);
+  } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      throw myError("토큰 만료", EXPIRED_TOKEN_ERROR);
+    } else if (error instanceof jwt.JsonWebTokenError) {
+      throw myError("토큰 이상 감지", INVALID_TOKEN_ERROR);
+    } else {
+      throw error;
+    }
+  }
+}
+
 // 내보내기
 // generateToken: private이라 export 하지 않음.
 export default {
   generateAccessToken,
   generateRefreshToken,
+  getBearerToken,
+  getClaimWithVerifyToken,
 };
