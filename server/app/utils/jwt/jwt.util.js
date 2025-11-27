@@ -97,7 +97,7 @@ function getBearerToken(req) {
  */
 function getClaimWithVerifyToken(token) {
   try {
-    return jwt.verify(token, process.env.JWT_SECRET);
+    return jwt.verify(token, process.env.JWT_SECRET); // payload (claim) {} 반환
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
       throw myError("토큰 만료", EXPIRED_TOKEN_ERROR);

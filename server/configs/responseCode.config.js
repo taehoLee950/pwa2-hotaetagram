@@ -137,7 +137,7 @@ Object.freeze(BAD_REQUEST_ERROR);
 const BAD_FILE_ERROR = {
   code: "E22",
   msg: "Bad File Error",
-  info: "파일은 필수(10MB이하)입니다.",
+  info: "잘못된 파일을 업로드 했거나 파일 크기가 (10MB) 초과입니다.",
   status: 400,
 };
 Object.freeze(BAD_FILE_ERROR);
