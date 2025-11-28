@@ -12,6 +12,9 @@ import swaggerUi from "swagger-ui-express";
 import SwaggerParser from "swagger-parser";
 import path from "path";
 import filesRouter from "./routes/files.router.js";
+import postsRouter from "./routes/posts.router.js";
+import notFoundRouter from "./routes/notFound.router.js";
+import pathUtil from "./app/utils/path/path.util.js";
 
 const app = express();
 app.use(express.json()); // JSON 요청 파싱 처리 전역 미들웨어
@@ -35,6 +38,7 @@ app.use(
 const swaggerDoc = await SwaggerParser.bundle(
   path.join(path.resolve(), "swagger/swagger.yaml")
 );
+
 // swagger ui 등록
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
@@ -42,7 +46,23 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 // 라우터 정의
 // ------------
 app.use("/api/auth", authRouter); // 인증 & 인가
-app.use("/api/files", filesRouter); // 파일 업로드
+app.use("/api/posts", postsRouter); // posts 라우터 등록
+app.use("/api/files", filesRouter); // 파일 업로드 (multer 기반)
+
+// ------------
+// 404 처리
+// ------------
+app.use(notFoundRouter);
+
+// ------------------
+// 뷰 반환 처리
+// ------------------
+// public 정적 파일 제공 활성화
+app.use("/", express.static(process.env.APP_DIST_PATH)); // 정적 파일처리
+// React 뷰 반환
+app.get(/^(?!\/files.*)/, (req, res) => {
+  return res.sendFile(pathUtil.getViewDirPath());
+});
 
 // 에러 핸들러 등록
 app.use(errorHandler);

@@ -58,10 +58,16 @@ db.Push_subscription = Push_subscription.init(sequelize);
 // --------------
 // 모델 관계 설정
 // --------------
-Object.keys(db).forEach((modelName) => {
-  if (db[modelName] && db[modelName].associate) {
-    db[modelName].associate(db);
-  }
-});
+// Object.keys(db).forEach((modelName) => {
+//   if (db[modelName] && db[modelName].associate) {
+//     db[modelName].associate(db);
+//   }
+// });
+User.associate(db);
+Post.associate(db);
+Comment.associate(db);
+Like.associate(db);
+Notification.associate(db);
+Push_subscription.associate(db);
 
 export default db;

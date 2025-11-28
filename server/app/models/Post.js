@@ -26,12 +26,12 @@ const attributes = {
     allowNull: false,
     comment: "유저 PK",
   },
-  title: {
-    field: "title",
-    type: DataTypes.STRING(50),
-    allowNull: false,
-    comment: "게시글 제목",
-  },
+  // title: {
+  //   field: "title",
+  //   type: DataTypes.STRING(50),
+  //   allowNull: false,
+  //   comment: "게시글 제목",
+  // },
   content: {
     field: "content",
     type: DataTypes.STRING(200),
@@ -112,6 +112,11 @@ const Post = {
       targetKey: "id",
       foreignKey: "userId",
       as: "author",
+    });
+    db.Post.hasMany(db.Comment, {
+      sourceKey: "id",
+      foreignKey: "postId",
+      as: "postToComment",
     });
   },
 };

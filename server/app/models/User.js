@@ -135,7 +135,7 @@ const User = {
       foreignKey: "userId",
       as: "comments",
     });
-    db.User.hasMany(db.Push_Subscription, {
+    db.User.hasMany(db.Push_subscription, {
       sourceKey: "id",
       foreignKey: "userId",
       as: "pushSubscriptions",

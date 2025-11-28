@@ -19,6 +19,7 @@ import { createBaseResponse } from "../utils/createBaseResponse.util.js";
 
 async function storePost(req, res, next) {
   try {
+    console.log(req.file, req.body);
     if (!req.file) {
       throw myError("파일 없음", BAD_FILE_ERROR);
     }

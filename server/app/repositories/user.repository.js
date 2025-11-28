@@ -24,8 +24,6 @@ async function findByEmail(t = null, email) {
       where: {
         email: email,
       },
-    },
-    {
       transaction: t, // 트랜잭션 인자를 받음.
     }
   );

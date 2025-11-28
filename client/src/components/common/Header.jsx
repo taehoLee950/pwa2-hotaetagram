@@ -15,7 +15,7 @@ export default function Header() {
           className={` ${(onlyTitleFlg && "header-top") || "header-top-grid"}`}
         >
           <h1 className={`${(onlyTitleFlg && "header-top-title-only") || ""}`}>
-            Meerkagram
+            Hotaetagram
           </h1>
           {!onlyTitleFlg && (
             <div className="header-top-btn-box">

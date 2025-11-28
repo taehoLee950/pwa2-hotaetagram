@@ -106,7 +106,7 @@ const Comment = {
     db.Comment.belongsTo(db.Post, {
       targetKey: "id",
       foreignKey: "postId",
-      as: "post",
+      as: "commentsToPosts",
     });
   },
 };
