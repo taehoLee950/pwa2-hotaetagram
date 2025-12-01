@@ -1,5 +1,5 @@
 /**
- * @file server/app/middlewares/auth.middleware.js
+ * @file /app/middlewares/auth/auth.middleware.js
  * @description 인증 및 인가 처리 미들웨어
  * 251126 v1.0.0 Lee init
  */
@@ -9,36 +9,50 @@ import myError from "../../errors/customs/my.error.js";
 import jwtUtil from "../../utils/jwt/jwt.util.js";
 import ROLE_PERMISSIONS from "./configs/role.permissions.js";
 
-//  -----------------
-//  Private
-//  -----------------
+// -----------------
+// Private
+// -----------------
+/**
+ * 토큰 검증 및 Request에 유저 정보 추가
+ * @param {import("express").Request} req
+ */
 function authenticate(req) {
-  const token = jwtUtil.getBearerToken(req); // JWT 토큰 추출
+  // 토큰 획득
+  const token = jwtUtil.getBearerToken(req);
 
   // 토큰 검증 및 페이로드 획득
-  const claims = jwtUtil.getClaimWithVerifyToken(token); // 토큰 유효 || 만료 확인
+  const claims = jwtUtil.getClaimsWithVerifyToken(token);
 
-  // 위 절차 성공 시 request 객체에 사용자 정보를 추가
+  // Request 객체에 사용자 정보를 추가
   req.user = {
-    id: parseInt(claims.sub), // 사용자 id 저장
-    role: claims.role, // 사용자 역할 저장
+    id: parseInt(claims.sub),
+    role: claims.role,
   };
 }
 
-//  -----------------
-//  Private
-//  -----------------
+/**
+ * 인증 및 권한 체크
+ * @param {import("express").Request} req
+ */
 function authorize(req) {
-  // 사용자 역할 조회
-  // req.method: request의 HTTP method (GET, POST...)등을 조회
+  // 요청에 맞는 권한 규칙 조회
   const matchRole = ROLE_PERMISSIONS[req.method].find((item) => {
-    return item.path.test(`${req.baseUrl}${req.path}`); // path: 권한 규칙,
-    // test(): 정규 표현식 객체의 메써드, 정규 표현식에 매치되는지 확인 후 boolean 반환
+    // console.log(
+    //   // http://localhost:3000/api/auth/login?id=1
+    //   req.originalUrl, // 유저가 보내온 전체 Path + Queries, `/api/auth/login?id=1`
+    //   req.baseUrl,  // 프리픽스로 묶은 Path, `/api/auth`
+    //   req.path      // `baseUrl`을 제외한 Path, `/login`
+    // );
+
+    // express는 경우에 따라 가장 마지막에 `/`를 붙이는 경우도 있어서, 그럴 경우 가장 마지막 `/`제거
+    const path = req.path.endsWith("/") ? req.path.slice(0, -1) : req.path;
+    return item.path.test(`${req.baseUrl}${path}`);
   });
 
   // 일치하는 규칙이 있을 시, 인증 및 권한 체크를 실시
   if (matchRole) {
-    authenticate(req); // 요청 헤더에서 JWT 토큰 유효성 검증 후 req.user의 id & role 재정의
+    // 인증 체크 및 인증 정보를 Request 셋
+    authenticate(req);
 
     // 권한 체크
     const userRole = req.user?.role;
@@ -48,9 +62,9 @@ function authorize(req) {
   }
 }
 
-//  -----------------
-//  Public
-//  -----------------
+// -----------------
+// public
+// -----------------
 export default function (req, res, next) {
   try {
     authorize(req);

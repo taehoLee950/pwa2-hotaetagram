@@ -1,21 +1,24 @@
 /**
- * @file server/app/middlewares/validations/fields/post.field.js
- * @description 포스트 필드 유효성 검사 필드
+ * @file app/middlewares/validations/fields/post.field.js
+ * @description 게시글 유효성 검사 필드
  * 251128 v1.0.0 Lee init
  */
 
 import { body, param } from "express-validator";
+import fs from "fs";
+import pathUtil from "../../../utils/path/path.util.js";
+import path from "path";
 
 // 페이지 필드
 export const page = body("page")
   .trim()
   .optional()
   .isNumeric()
-  .withMessage("숫자만 허용")
+  .withMessage("숫자만 허용합니다.")
   .toInt();
 
-// 게시글 PK 빌드
-export const id = param("id") // segment param에서 id 빼오기, query라면 param.query
+// 게시글 PK 필드
+export const id = param("id")
   .trim()
   .notEmpty()
   .withMessage("필수 항목입니다.")
@@ -23,3 +26,43 @@ export const id = param("id") // segment param에서 id 빼오기, query라면 p
   .isNumeric()
   .withMessage("숫자만 허용합니다.")
   .toInt();
+
+// 게시글 내용
+export const content = body("content")
+  .trim()
+  .notEmpty()
+  .withMessage("내용은 필수 항목입니다.");
+
+// 게시글 이미지
+export const image = body("image")
+  .trim()
+  .notEmpty()
+  .withMessage("이미지는 필수 항목입니다.")
+  .bail()
+  .custom((val) => {
+    if (
+      !val.startsWith(
+        `${process.env.APP_URL}${process.env.ACCESS_FILE_POST_IMAGE_PATH}`
+      )
+    ) {
+      return false;
+    }
+
+    return true;
+  })
+  .withMessage("허용하지 않는 이미지 경로입니다.")
+  .bail()
+  .custom((val) => {
+    const splitPath = val.split("/");
+    const fullPath = path.join(
+      pathUtil.getPostsImagePath(),
+      splitPath[splitPath.length - 1]
+    );
+    console.log(fullPath);
+    if (!fs.existsSync(fullPath)) {
+      return false;
+    }
+
+    return true;
+  })
+  .withMessage("존재하지 않는 이미지 경로입니다.");
