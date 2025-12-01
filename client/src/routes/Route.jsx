@@ -7,8 +7,10 @@ import App from "../App.jsx";
 import Login from "../components/auth/Login.jsx";
 import PostIndex from "../components/posts/PostIndex.jsx";
 import PostCreate from "../components/posts/PostCreate.jsx";
-import UserInfo from "../components/common/UserInfo.jsx";
+import UserInfo from "../components/users/UserInfo.jsx";
 import Registration from "../components/users/Registration.jsx";
+import PostShow from "../components/posts/PostShow.jsx";
+
 const router = createBrowserRouter([
   {
     element: <App />,
@@ -26,20 +28,24 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: "/posts",
-        element: <PostIndex />,
-      },
-      {
-        path: "/post/create",
-        element: <PostCreate />,
-      },
-      {
         path: "/registration",
         element: <Registration />,
       },
       {
-        path: "/userinfo/:id",
+        path: "/users/:id",
         element: <UserInfo />,
+      },
+      {
+        path: "/posts",
+        element: <PostIndex />,
+      },
+      {
+        path: "/posts/create",
+        element: <PostCreate />,
+      },
+      {
+        path: "/posts/show/:id",
+        element: <PostShow />,
       },
     ],
   },
