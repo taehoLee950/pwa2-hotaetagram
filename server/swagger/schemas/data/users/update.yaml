@@ -2,13 +2,13 @@ tags:
   - 유저
 summary: 수정
 description: 수정
-operationId: "user-update"
+operationId: 'user-update'
 parameters:
   - in: header
     name: Authorization
     schema:
       type: string
-      example: "bearer eyJhbGciOiJzaGEyNTYiL..."
+      example: 'bearer eyJhbGciOiJzaGEyNTYiL...'
     required: true
     description: 엑세스 토큰
 requestBody:
@@ -17,9 +17,10 @@ requestBody:
     application/json:
       schema:
         type: object
+        required:
+          - password
         properties:
           password:
-            required: true
             description: 비밀번호
             type: string
             example: qwe123!@
@@ -32,7 +33,7 @@ requestBody:
             type: string
             example: http://localhost:3000/file/profile/we4h6se547h5dgb5yagb.png
 responses:
-  "200":
+  '200':
     description: 성공
     content:
       application/json:
@@ -42,7 +43,7 @@ responses:
             code:
               description: 코드
               type: string
-              example: "00"
+              example: '00'
             msg:
               description: 메세지
               type: string
@@ -50,7 +51,7 @@ responses:
             data:
               description: 게시글 정보
               type: object
-              properties:
+              properties: 
                 id:
                   description: PK
                   type: integer
@@ -66,7 +67,7 @@ responses:
                 role:
                   description: 권한
                   type: string
-                  example: NORMAL
+                  example: NOMAL
                 profile:
                   description: 프로필 사진
                   type: string
@@ -90,26 +91,26 @@ responses:
                   description: 작성글 수
                   type: integer
                   example: 50
-  "400":
+  '400':
     description: 유효성 검사 에러
     content:
       application/json:
         schema:
-          $ref: "../../errors/BadRequest.yaml"
-  "401":
+          $ref: '../../errors/BadRequest.yaml'
+  '401':
     description: 권한 에러
     content:
       application/json:
         schema:
           oneOf:
-            - $ref: "../../errors/Unauthorized.yaml"
-            - $ref: "../../errors/ExpiredToken.yaml"
-            - $ref: "../../errors/InvalidToken.yaml"
-  "500":
+            - $ref: '../../errors/Unauthorized.yaml'
+            - $ref: '../../errors/ExpiredToken.yaml'
+            - $ref: '../../errors/InvalidToken.yaml'
+  '500':
     description: DB 에러 및 시스템 에러
     content:
       application/json:
         schema:
           oneOf:
-            - $ref: "../../errors/Db.yaml"
-            - $ref: "../../errors/System.yaml"
+            - $ref: '../../errors/Db.yaml'
+            - $ref: '../../errors/System.yaml'

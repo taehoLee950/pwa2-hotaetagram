@@ -2,9 +2,9 @@ tags:
   - 인증
 summary: 토큰 재발급
 description: 리프래시 토큰으로 엑세스 토큰 재발급 처리
-operationId: "auth-reissue"
+operationId: 'auth-reissue'
 parameters:
-  - name: refresh-token
+  - name: refresh-token 
     in: cookie
     description: 리프래시 토큰 쿠키
     required: true
@@ -12,14 +12,13 @@ parameters:
       type: string
       example: eyJhbGciOiJzaGEyNTYiL...
 responses:
-  "200":
+  '200':
     description: 성공
     headers:
       Set-Cookie:
         schema:
-          description: 리프래시 토큰
           type: string
-          example: eyJhbGciOiJzaGEyNTYiL...
+          example: refresh-token=eyJhbGciOiJzaGEyNTYiL...; path=/; HttpOnly
     content:
       application/json:
         schema:
@@ -28,7 +27,7 @@ responses:
             code:
               description: 코드
               type: string
-              example: "00"
+              example: '00'
             msg:
               description: 메세지
               type: string
@@ -58,7 +57,7 @@ responses:
                     role:
                       description: 권한
                       type: string
-                      example: NORMAL
+                      example: NOMAL
                     profile:
                       description: 프로필 사진
                       type: string
@@ -82,17 +81,17 @@ responses:
                       description: 작성글 수
                       type: integer
                       example: 50
-  "401":
+  '401':
     description: 재발급 에러
     content:
       application/json:
         schema:
-          $ref: "../../errors/Reissue.yaml"
-  "500":
+          $ref: '../../errors/Reissue.yaml'
+  '500':
     description: DB 에러 및 시스템 에러
     content:
       application/json:
         schema:
           oneOf:
-            - $ref: "../../errors/Db.yaml"
-            - $ref: "../../errors/System.yaml"
+            - $ref: '../../errors/Db.yaml'
+            - $ref: '../../errors/System.yaml'

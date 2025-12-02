@@ -2,14 +2,16 @@ tags:
   - 인증
 summary: 로그인
 description: 회원의 로그인 처리후 JWT 및 회원정보 반환
-operationId: "auth-login"
+operationId: 'auth-login'
 requestBody:
   description: 회원 로그인 정보
-  required: true
   content:
     application/json:
       schema:
         type: object
+        required:
+          - email
+          - password
         properties:
           email:
             description: 회원 아이디
@@ -20,14 +22,13 @@ requestBody:
             type: string
             example: qwe123!@
 responses:
-  "200":
+  '200':
     description: 성공
     headers:
       Set-Cookie:
         schema:
-          description: 리프래시 토큰
           type: string
-          example: eyJhbGciOiJzaGEyNTYiL...
+          example: refresh-token=eyJhbGciOiJzaGEyNTYiL...; path=/; HttpOnly
     content:
       application/json:
         schema:
@@ -36,7 +37,7 @@ responses:
             code:
               description: 코드
               type: string
-              example: "00"
+              example: '00'
             msg:
               description: 메세지
               type: string
@@ -66,7 +67,7 @@ responses:
                     role:
                       description: 권한
                       type: string
-                      example: NORMAL
+                      example: NOMAL
                     profile:
                       description: 프로필 사진
                       type: string
@@ -90,23 +91,23 @@ responses:
                       description: 작성글 수
                       type: integer
                       example: 50
-  "400":
+  '400':
     description: 유효성 검사 에러
     content:
       application/json:
         schema:
-          $ref: "../../errors/BadRequest.yaml"
-  "401":
+          $ref: '../../errors/BadRequest.yaml'
+  '401':
     description: 미가입 회원 또는 비밀번호 이상
     content:
       application/json:
         schema:
-          $ref: "../../errors/NotRegistered.yaml"
-  "500":
+          $ref: '../../errors/NotRegistered.yaml'
+  '500':
     description: DB 에러 및 시스템 에러
     content:
       application/json:
         schema:
           oneOf:
-            - $ref: "../../errors/Db.yaml"
-            - $ref: "../../errors/System.yaml"
+            - $ref: '../../errors/Db.yaml'
+            - $ref: '../../errors/System.yaml'
