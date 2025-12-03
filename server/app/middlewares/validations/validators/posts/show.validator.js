@@ -4,6 +4,6 @@
  * 251128 v1.0.0 Lee init
  */
 
-import { content, image } from "../../fields/post.field.js";
+import { id } from "../../fields/post.field.js";
 
-export default [content, image];
+export default [id];

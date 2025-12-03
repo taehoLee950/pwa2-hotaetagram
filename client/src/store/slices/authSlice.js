@@ -35,6 +35,6 @@ const slice = createSlice({
   },
 });
 
-export const {} = slice.actions;
+export const { clearAuth } = slice.actions;
 
 export default slice.reducer;

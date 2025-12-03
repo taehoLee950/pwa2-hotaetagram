@@ -2,7 +2,7 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { reissueThunk } from "../store/thunks/authThunk.js";
-import clearAuth from "../store/slices/authSlice.js";
+import { clearAuth } from "../store/slices/authSlice.js";
 
 // 유저 권한
 const ROLE = {

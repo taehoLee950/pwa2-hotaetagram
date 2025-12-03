@@ -21,7 +21,7 @@ function authenticate(req) {
   const token = jwtUtil.getBearerToken(req);
 
   // 토큰 검증 및 페이로드 획득
-  const claims = jwtUtil.getClaimsWithVerifyToken(token);
+  const claims = jwtUtil.getClaimWithVerifyToken(token);
 
   // Request 객체에 사용자 정보를 추가
   req.user = {

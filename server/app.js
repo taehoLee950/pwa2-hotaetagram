@@ -16,6 +16,7 @@ import postsRouter from "./routes/posts.router.js";
 import notFoundRouter from "./routes/notFound.router.js";
 import pathUtil from "./app/utils/path/path.util.js";
 import cookieParser from "cookie-parser";
+import commentsRouter from "./routes/comments.router.js";
 
 const app = express();
 app.use(express.json()); // JSON 요청 파싱 처리 전역 미들웨어
@@ -26,11 +27,11 @@ app.use(cookieParser()); // 쿠키 파서
 // ------------------
 app.use(
   process.env.ACCESS_FILE_POST_IMAGE_PATH,
-  express.static(process.env.ACCESS_FILE_POST_IMAGE_PATH)
+  express.static(process.env.FILE_POST_IMAGE_PATH)
 );
 app.use(
   process.env.ACCESS_FILE_USER_PROFILE_PATH,
-  express.static(process.env.ACCESS_FILE_USER_PROFILE_PATH)
+  express.static(process.env.FILE_USER_PROFILE_PATH)
 );
 
 // ------------
@@ -50,6 +51,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 app.use("/api/auth", authRouter); // 인증 & 인가
 app.use("/api/posts", postsRouter); // posts 라우터 등록
 app.use("/api/files", filesRouter); // 파일 업로드 (multer 기반)
+app.use("/api/comments", commentsRouter);
 
 // ------------
 // 404 처리

@@ -35,7 +35,7 @@ const attributes = {
   },
   replyId: {
     // self fk (self join) -> this.pk 참조
-    field: "post_id",
+    field: "reply_id",
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
     comment: "게시글 PK",
@@ -107,6 +107,11 @@ const Comment = {
       targetKey: "id",
       foreignKey: "postId",
       as: "commentsToPosts",
+    });
+    db.Comment.hasMany(db.Comment, {
+      sourceKey: "id",
+      foreignKey: "replyId",
+      as: "replies",
     });
   },
 };

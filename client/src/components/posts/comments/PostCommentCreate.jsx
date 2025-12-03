@@ -1,20 +1,38 @@
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import "./PostCommentCreate.css";
+import { storeCommentThunk } from "../../../store/thunks/commentCreateThunk.js";
+import { postShowThunk } from "../../../store/thunks/postShowThunk.js";
 
 export default function PostCommentCreate({ postId, replyId = 0 }) {
+  const dispatch = useDispatch();
+  const [content, setContent] = useState("");
+
+  async function handleCommentStore(e) {
+    e.preventDefault();
+  }
+
+  async function storeComment() {
+    await dispatch(storeCommentThunk({ postId, replyId, content }));
+    await dispatch(postShowThunk(postId));
+  }
   return (
     <>
-      <div className="post-comment-create-box">
+      <form className="post-comment-create-box" onSubmit={handleCommentStore}>
         <input
+          onChange={(e) => {
+            setContent(e.target.value);
+          }}
           type="text"
           className="post-comment-create-input-add"
-          name="comment"
           placeholder={`add comments...`}
         />
         <div
+          onClick={storeComment}
           className="post-comment-create-btn-add"
           style={{ backgroundImage: `url("/icons/btn-add.png")` }}
         ></div>
-      </div>
+      </form>
     </>
   );
 }

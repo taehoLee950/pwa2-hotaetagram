@@ -104,7 +104,7 @@ function getClaimWithVerifyToken(token) {
     } else if (error instanceof jwt.JsonWebTokenError) {
       throw myError("토큰 이상 감지", INVALID_TOKEN_ERROR);
     } else {
-      throw error;
+      throw myError(error.message || "알 수 없는 토큰 오류", INVALID_TOKEN_ERROR);
     }
   }
 }
