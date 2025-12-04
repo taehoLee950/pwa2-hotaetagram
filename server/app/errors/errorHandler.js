@@ -38,7 +38,7 @@ export default function errorHandler(e, req, res, next) {
 
   // 개발 모드일 경우 콘솔로 에러 로그 출력
   if (process.env.APP_MODE === "dev") {
-    console.log(e.stack);
+    console.log(`${e.name}: ${e.message}\n${e.stack}`);
   }
 
   return res.status(e.codeInfo.status).send(createBaseResponse(e.codeInfo));

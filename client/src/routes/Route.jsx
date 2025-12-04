@@ -10,6 +10,7 @@ import PostCreate from "../components/posts/PostCreate.jsx";
 import UserInfo from "../components/users/UserInfo.jsx";
 import Registration from "../components/users/Registration.jsx";
 import PostShow from "../components/posts/PostShow.jsx";
+import Social from "../components/auth/Social.jsx";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
         element: <PostShow />,
       },
     ],
+  },
+  {
+    path: "/callback/social",
+    element: <Social />,
   },
 ]);
 export default function Router() {

@@ -13,10 +13,10 @@ export default function Login() {
   async function handleLogin(e) {
     // 기본(기존)이벤트 막기
     e.preventDefault();
-
+    // 로그인 요청
     try {
       await dispatch(
-        loginThunk({ email, password }) // 로그인 요청
+        loginThunk({ email, password }) 
       ).unwrap();
 
       return navigate("/posts", { replace: true }); // replace: true : history 관련
@@ -25,6 +25,11 @@ export default function Login() {
       const code = error.response?.data?.code;
       alert(`로그인 실패했습니다. ${code}`);
     }
+  }
+
+  function handleSocial(provider) {
+    // vanila JS로 작성
+    window.location.replace(`/api/auth/social/${provider}`);
   }
 
   // /**
@@ -69,7 +74,7 @@ export default function Login() {
           Log in
         </button>
         <div className="text-on-line">or</div>
-        <button type="button" className="btn-big bg-img-kakao"></button>
+        <button type="button" className="btn-big bg-img-kakao" onClick={() => {handleSocial('kakao')}}></button>
         <button type="button" className="btn-big bg-light">
           Sign up
         </button>
