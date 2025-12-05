@@ -41,6 +41,28 @@ async function login(req, res, next) {
 }
 
 /**
+ * 로그아웃 컨트롤러 처리
+ * @param {import("express").Request} req - Request 객체
+ * @param {import("express").Response} res - Response 객체
+ * @param {import("express").NextFunction} next - NextFunction 객체
+ * @returns
+ */
+async function logout(req, res, next) {
+  try {
+    const id = req.user.id;
+
+    // 로그아웃 서비스 호출
+    await authService.logout(id);
+
+    // cookie에 refreshToken 만료처리
+
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS));
+  } catch (error) {
+    return next(error);
+  }
+}
+
+/**
  * 토큰 재발급 컨트롤러 처리
  * @param {import("express").Request} req - Request 객체
  * @param {import("express").Response} res - Response 객체
@@ -114,7 +136,31 @@ async function socialCallback(req, res, next) {
     // Cookie에 RefreshToken 설정
     cookieUtil.setCookieRefreshToken(res, refreshToken);
 
+    // Cookie에 refreshToken 만료
+    cookieUtil.clearCookieRefreshToken(res);
+
     return res.redirect(process.env.SOCIAL_CLIENT_CALLBACK_URL);
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * 회원가입 컨트롤러
+ * @param {import("express").Request} req - Request 객체
+ * @param {import("express").Response} res - Response 객체
+ * @param {import("express").NextFunction} next - NextFunction 객체
+ * @returns
+ */
+async function register(req, res, next) {
+  try {
+    const { email, password, nick } = req.body;
+
+    await authService.register({ email, password, nick });
+
+    return res
+      .status(SUCCESS.status)
+      .send(createBaseResponse(SUCCESS, "회원가입에 성공했습니다."));
   } catch (error) {
     next(error);
   }
@@ -125,7 +171,9 @@ async function socialCallback(req, res, next) {
 // --------------
 export default {
   login,
+  logout,
   reissue,
   social,
   socialCallback,
+  register,
 };

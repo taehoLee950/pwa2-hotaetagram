@@ -5,6 +5,7 @@
  */
 
 import db from "../models/index.js";
+import { Op } from "sequelize"; // Op를 직접 import
 const { User } = db;
 
 /**
@@ -53,9 +54,37 @@ async function create(t = null, data) {
   return await User.create(data, { transaction: t });
 }
 
+async function logout(t = null, id) {
+  return await User.update(
+    {
+      refreshToken: null,
+    },
+    {
+      where: {
+        id: id, // column : param id
+      },
+      transaction: t,
+    }
+  );
+  // 특정 유저 리프래시토큰 null로 갱신
+  // UPDATE users SET refresh_token = null, updated_at = NOW() WHERE id = ?
+}
+
+// 이메일 & 닉네임 조회 한번에
+async function findByEmailOrNick(t = null, { email, nick }) {
+  return await User.findOne({
+    where: {
+      [Op.or]: [{ email }, { nick }],
+    },
+    transaction: t,
+  });
+}
+
 export default {
   findByEmail,
   save,
   findByPk,
   create,
+  logout,
+  findByEmailOrNick,
 };

@@ -52,6 +52,7 @@ app.use("/api/auth", authRouter); // 인증 & 인가
 app.use("/api/posts", postsRouter); // posts 라우터 등록
 app.use("/api/files", filesRouter); // 파일 업로드 (multer 기반)
 app.use("/api/comments", commentsRouter);
+app.use("/registration", authRouter); // 회원가입 절차 라우트
 
 // ------------
 // 404 처리

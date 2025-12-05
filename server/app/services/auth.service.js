@@ -8,6 +8,7 @@ import bcrypt from "bcrypt";
 import userRepository from "../repositories/user.repository.js";
 import myError from "../errors/customs/my.error.js";
 import {
+  CONFLICT_ERROR,
   NOT_REGISTERED_ERROR,
   REISSUE_ERROR,
 } from "../../configs/responseCode.config.js";
@@ -59,6 +60,53 @@ async function login(body) {
       refreshToken,
       user,
     };
+  });
+}
+
+/**
+ * 로그아웃 처리
+ * @param {number} id - 유저id
+ */
+async function logout(id) {
+  return await userRepository.logout(null, id);
+}
+
+/**
+ * 회원가입
+ * @param {{email: string, password: string, nick: string}} body
+ */
+async function register(body) {
+  return await db.sequelize.transaction(async (t) => {
+    const { email, password, nick } = body;
+
+    // 1. 이메일 또는 닉네임 중복 확인
+    const existingUser = await userRepository.findByEmailOrNick(t, {
+      email,
+      nick,
+    });
+
+    if (existingUser) {
+      if (existingUser.email === email) {
+        throw myError("이미 사용 중인 이메일입니다.", CONFLICT_ERROR);
+      }
+      if (existingUser.nick === nick) {
+        throw myError("이미 사용 중인 닉네임입니다.", CONFLICT_ERROR);
+      }
+    }
+
+    // 2. 비밀번호 암호화
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // 3. 사용자 생성
+    const data = {
+      email,
+      password: hashedPassword,
+      nick,
+      provider: "NONE", // 일반 회원가입
+      role: ROLE.NORMAL, // 일반 사용자 역할
+      profile: process.env.DEFAULT_PROFILE_URL, // 기본 프로필 이미지
+    };
+    await userRepository.create(t, data);
   });
 }
 
@@ -172,4 +220,6 @@ export default {
   login,
   reissue,
   socialKakao,
+  logout,
+  register,
 };

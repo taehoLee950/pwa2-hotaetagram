@@ -37,3 +37,45 @@ export const reissueThunk = createAsyncThunk(
     }
   }
 );
+
+// 로그아웃
+export const logoutThunk = createAsyncThunk(
+  "auth/logoutThunk",
+  async (_, { rejectWithValue }) => {
+    try {
+      const url = "/api/auth/logout";
+      const response = await axiosInstance.post(url);
+
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.data);
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// 회원가입
+export const registerThunk = createAsyncThunk(
+  "auth/registerThunk",
+  async (args, { rejectWithValue }) => {
+    try {
+      const url = "api/auth/register";
+      const { email, password, passwordCheck, nick } = args;
+      const response = await axiosInstance.post(url, {
+        email,
+        password,
+        passwordCheck,
+        nick,
+      });
+
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.data);
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);

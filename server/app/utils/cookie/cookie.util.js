@@ -17,6 +17,7 @@ import dayjs from "dayjs";
  * @param {number} ttl
  * @param {boolean} httpOnlyFlg
  * @param {boolean} secureFlg
+ * @param {string|null} path
  */
 function setCookie(
   res,
@@ -24,15 +25,23 @@ function setCookie(
   cookieValue,
   ttl,
   httpOnlyFlg = true,
-  secureFlg = false
+  secureFlg = false,
+  path = null
 ) {
-  res.cookie(cookieName, cookieValue, {
+  const options = {
     expires: dayjs().add(ttl, "second").toDate(),
     httpOnly: httpOnlyFlg,
     secure: secureFlg,
     sameSite: "none", // domain 검증 실행 여부
-  });
+    path: "",
+  };
+
+  if (path) {
+    options.path = path;
+  }
+  res.cookie(cookieName, cookieValue, options);
 }
+
 /**
  * 특정 쿠키 획득 (미존재 시 빈문자열 반환)
  * @param {import('express').Request} req
@@ -47,6 +56,34 @@ function getCookie(req, cookieName) {
   }
 
   return cookieValue;
+}
+
+/**
+ * 쿠키 제거
+ * @param {import('express').Response} res
+ * @param {string} cookieName
+ * @param {boolean} httpOnlyFlg
+ * @param {boolean} secureFlg
+ * @param {string|null} path
+ */
+function clearCookie(
+  res,
+  cookieName,
+  httpOnlyFlg = true,
+  secureFlg = false,
+  path = null
+) {
+  const options = {
+    httpOnly: httpOnlyFlg,
+    secure: secureFlg,
+    sameSite: "none",
+  };
+
+  if (path) {
+    options.path = path;
+  }
+
+  res.clearCookie(cookieName, options);
 }
 
 // ----------------
@@ -64,7 +101,8 @@ function setCookieRefreshToken(res, refreshToken) {
     refreshToken,
     parseInt(process.env.JWT_REFRESH_TOKEN_COOKIE_EXPIRY),
     true,
-    true
+    true,
+    process.env.JWT_REISSUE_URI
   );
 }
 
@@ -77,7 +115,21 @@ function getCookieRefreshToken(req) {
   return getCookie(req, process.env.JWT_REFRESH_TOKEN_COOKIE_NAME);
 }
 
+/**
+ * 리프래시 토큰 쿠키 제거
+ */
+function clearCookieRefreshToken(res) {
+  clearCookie(
+    res,
+    process.env.JWT_REFRESH_TOKEN_COOKIE_NAME,
+    true,
+    true,
+    process.env.JWT_REISSUE_URI
+  );
+}
+
 export default {
   setCookieRefreshToken,
   getCookieRefreshToken,
+  clearCookieRefreshToken,
 };
