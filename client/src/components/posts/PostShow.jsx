@@ -50,7 +50,9 @@ export default function PostsShow() {
         </div>
       )}
 
-      {openDeleteFlg && <PostDelete setCloseDeleteModal={closeDeleteModal} />}
+      {openDeleteFlg && (
+        <PostDelete id={id} setCloseDeleteModal={closeDeleteModal} />
+      )}
     </>
   );
 }

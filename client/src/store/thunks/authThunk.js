@@ -57,25 +57,51 @@ export const logoutThunk = createAsyncThunk(
 );
 
 // 회원가입
+
 export const registerThunk = createAsyncThunk(
+
   "auth/registerThunk",
+
   async (args, { rejectWithValue }) => {
+
     try {
+
       const url = "api/auth/register";
-      const { email, password, passwordCheck, nick } = args;
+
+      // passwordCheck는 UI에서만 사용하므로, thunk에 전달하지 않습니다.
+
+      // UI 컴포넌트에서 nickname 필드를 받습니다.
+
+      const { email, password, nickname } = args;
+
+
+
       const response = await axiosInstance.post(url, {
+
         email,
+
         password,
-        passwordCheck,
-        nick,
+
+        nickname, // 'nick' -> 'nickname'
+
       });
 
+
+
       return response.data;
+
     } catch (error) {
+
       if (error.response) {
+
         return rejectWithValue(error.response.data);
+
       }
+
       return rejectWithValue(error.message);
+
     }
+
   }
+
 );

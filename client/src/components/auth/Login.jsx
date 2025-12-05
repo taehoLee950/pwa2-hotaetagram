@@ -15,9 +15,7 @@ export default function Login() {
     e.preventDefault();
     // 로그인 요청
     try {
-      await dispatch(
-        loginThunk({ email, password }) 
-      ).unwrap();
+      await dispatch(loginThunk({ email, password })).unwrap();
 
       return navigate("/posts", { replace: true }); // replace: true : history 관련
     } catch (error) {
@@ -30,6 +28,10 @@ export default function Login() {
   function handleSocial(provider) {
     // vanila JS로 작성
     window.location.replace(`/api/auth/social/${provider}`);
+  }
+
+  function redirectRegistration() {
+    return navigate("/registration");
   }
 
   // /**
@@ -74,8 +76,18 @@ export default function Login() {
           Log in
         </button>
         <div className="text-on-line">or</div>
-        <button type="button" className="btn-big bg-img-kakao" onClick={() => {handleSocial('kakao')}}></button>
-        <button type="button" className="btn-big bg-light">
+        <button
+          type="button"
+          className="btn-big bg-img-kakao"
+          onClick={() => {
+            handleSocial("kakao");
+          }}
+        ></button>
+        <button
+          type="button"
+          className="btn-big bg-light"
+          onClick={redirectRegistration}
+        >
           Sign up
         </button>
       </form>
