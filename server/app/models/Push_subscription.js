@@ -28,10 +28,28 @@ const attributes = {
   },
   endpoint: {
     field: "endpoint",
-    type: DataTypes.STRING(255),
+    type: DataTypes.STRING(500),
     allowNull: false,
     unique: true,
     comment: "엔드포인트",
+  },
+  p256dh: {
+    field: "p256dh",
+    type: DataTypes.STRING(255),
+    allowNull: false,
+    comment: "공개키",
+  },
+  auth: {
+    field: "auth",
+    type: DataTypes.STRING(255),
+    allowNull: false,
+    comment: "인증키",
+  },
+  device: {
+    field: "device",
+    type: DataTypes.STRING(500),
+    allowNull: false,
+    comment: "디바이스",
   },
   createdAt: {
     field: "created_at",
@@ -73,7 +91,7 @@ const attributes = {
 
 // 옵션 설정
 const options = {
-  tableName: "users", // 실제 테이블 명
+  tableName: "push_subscriptions", // 실제 테이블 명
   timeStamps: true, // createdAt, updatedAt,
   paranoid: true, // deletedAt 자동 관리
 };

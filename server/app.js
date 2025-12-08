@@ -17,6 +17,7 @@ import notFoundRouter from "./routes/notFound.router.js";
 import pathUtil from "./app/utils/path/path.util.js";
 import cookieParser from "cookie-parser";
 import commentsRouter from "./routes/comments.router.js";
+import subscriptionsRouter from "./routes/subscriptions.router.js";
 
 const app = express();
 app.use(express.json()); // JSON 요청 파싱 처리 전역 미들웨어
@@ -53,6 +54,7 @@ app.use("/api/posts", postsRouter); // posts 라우터 등록
 app.use("/api/files", filesRouter); // 파일 업로드 (multer 기반)
 app.use("/api/comments", commentsRouter);
 app.use("/registration", authRouter); // 회원가입 절차 라우트
+app.use("/api/subscriptions", subscriptionsRouter);
 
 // ------------
 // 404 처리

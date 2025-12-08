@@ -20,6 +20,7 @@ const ROLE_PERMISSIONS = {
     { path: /^\/api\/comments$/, roles: [NORMAL, SUPER] },
     { path: /^\/api\/files\/posts$/, roles: [NORMAL, SUPER] },
     { path: /^\/api\/files\/profiles$/, roles: [NORMAL, SUPER] },
+    { path: /^\/api\/subscriptions$/, roles: [NORMAL, SUPER] },
   ],
   PUT: [{ path: /^\/api\/users$/, roles: [NORMAL, SUPER] }],
   DELETE: [{ path: /^\/api\/posts\/[0-9]+$/, roles: [NORMAL, SUPER] }],
